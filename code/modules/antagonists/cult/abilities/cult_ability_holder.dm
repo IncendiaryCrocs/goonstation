@@ -135,6 +135,53 @@
 		actions.interrupt(holder.owner, INTERRUPT_ACT)
 		return
 
+/// Creates an obsession object out of *any* object
+/datum/targetable/cult/choose_obsession
+	name = "Choose obsession"
+	desc = "Pick an object to orient your cult around!"
+	icon_state = "obsess"
+	targeted = TRUE
+	target_anything = TRUE
+	target_in_inventory = TRUE
+	do_logs = TRUE
+	interrupt_action_bars = FALSE
+	cooldown = 999
+
+	cast(obj/target)
+		..()
+		if (!holder || !target)
+			return
+		var/mob/living/carbon/human/M = holder.owner
+		if (!M)
+			return
+
+		var/datum/antagonist/cult_leader/antag = M.mind.get_antagonist(ROLE_CULT_LEADER)
+		if (!antag)
+			boutput(M, SPAN_ALERT("You aren't nearly mental enough to pull off this magic!"))
+			return
+
+		var/is_acceptable = FALSE
+		for (var/acceptable_type as anything in CULT_PERMITTED_OBSESSION_TYPES)
+			if ( istype(target, acceptable_type))
+				is_acceptable = TRUE
+				break
+		for (var/unacceptable_type as anything in CULT_BANNED_OBSESSION_TYPES)
+			if (istype(target, unacceptable_type) || !is_acceptable)
+				is_acceptable = FALSE
+				break
+		if (!is_acceptable)
+			boutput(M, SPAN_ALERT("You can't pick this object as your cult's object of worship."))
+			return
+
+		// There's CULT_FRY_OBSESSION_TYPES, so on the todo is to make these types make a "copy" that just looks like it
+
+
+
+		boutput(M, SPAN_CULTSAY("You choose [target] as your cult's focus."))
+		var/datum/cult_obj_overhead/obsession/obsession = new(target, antag.cult)
+		..()
+
+
 /// Creates a cult rune. Decorative, if not part of a cult, otherwise subscribes it to sacrifice checking.
 /datum/targetable/cult/create_circle
 	name = "Create rune"

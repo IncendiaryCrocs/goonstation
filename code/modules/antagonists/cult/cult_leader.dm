@@ -35,6 +35,7 @@
 
 		src.ability_holder.addAbility(/datum/targetable/cult/summon_robe)
 		src.ability_holder.addAbility(/datum/targetable/cult/create_circle)
+		src.ability_holder.addAbility(/datum/targetable/cult/choose_obsession)
 
 		var/mob/living/carbon/human/H = src.owner.current
 		// Add secret cult channel

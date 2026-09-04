@@ -134,14 +134,18 @@
 	var/cult_name = "Cult Name"
 	/// The "style" of the cult, which will (one day) effect cult circles and their respective robes
 	var/style = "default"
+	/// Obsession
+	var/datum/cult_obj_overhead/obsession = null
+	/// Points
+	var/points = CULT_STARTING_POINTS
+
 	/// The ID of the color selected
 	var/color_id = 0
 	/// The mind of this cult's leader.
 	var/datum/mind/leader = null
 	/// The minds of cult members associated with this cult. Does not include the cult leader.
 	var/list/datum/mind/members = list()
-	/// Points
-	var/points = CULT_STARTING_POINTS
+
 
 	proc/living_member_count()
 		var/result = 0
