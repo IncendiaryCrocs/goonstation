@@ -108,7 +108,6 @@
 
 	New(obj/new_obj, datum/cult/new_cult)
 		tracking_sacrifices = list()
-		START_TRACKING // Tracked by processes
 		..()
 		is_rune = istype(new_obj, /obj/decal/cultcircle)
 		if (is_rune)

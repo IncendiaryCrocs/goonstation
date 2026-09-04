@@ -190,6 +190,19 @@
 		leader_antag.display_name = "[src.cult_name] [leader_antag.display_name]"
 		return
 
+	proc/announce(text)
+		boutput(src.leader.current, SPAN_CULTSAY(text))
+		for (var/datum/mind/culter as anything in src.members)
+			boutput(culter.current, SPAN_CULTSAY(text))
+
+	proc/award_points(amount, do_announce, text)
+		src.points += amount
+		if (do_announce == TRUE)
+			if (text == null)
+				text = "[src.cult_name] has been awarded [amount] points!"
+			text += SPAN_ITALIC(" There are now [points] points to spend.")
+		src.announce(text)
+
 	New()
 		. = ..()
 		if (colors_left == null)
@@ -209,19 +222,10 @@
 			var/datum/antagonist/antag = culter.get_antagonist(ROLE_CULT_MEMBER)
 			antag.display_name = "[src.cult_name] [antag.display_name]"
 
-	proc/award_points(amount, do_announce, text)
-		src.points += amount
-		if (do_announce == TRUE)
-			if (text == null)
-				text = "[src.cult_name] has been awarded [amount] points!"
-			text += SPAN_ITALIC(" There are now [points] points to spend.")
-		boutput(src.leader.current, SPAN_CULTSAY(text))
-		for (var/datum/mind/culter as anything in src.members)
-			boutput(culter.current, SPAN_CULTSAY(text))
-
 	disposing()
 		..()
 
+/// Important Cult objects that "float" over objects like sacrificial circles and obsessions
 /datum/cult_obj_overhead
 	var/obj/connected_obj
 	var/datum/cult/owner
