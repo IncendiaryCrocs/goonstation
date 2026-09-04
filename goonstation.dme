@@ -889,6 +889,7 @@
 #include "code\modules\antagonists\cult\cult_leader.dm"
 #include "code\modules\antagonists\cult\cult_member.dm"
 #include "code\modules\antagonists\cult\cult_sacrifices.dm"
+#include "code\modules\antagonists\cult\obsession.dm"
 #include "code\modules\antagonists\cult\abilities\cult_ability_holder.dm"
 #include "code\modules\antagonists\eldritch_madness\broken.dm"
 #include "code\modules\antagonists\flockmind\flockmind.dm"

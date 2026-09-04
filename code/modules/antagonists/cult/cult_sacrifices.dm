@@ -13,28 +13,12 @@
 			. -= 100
 		return .
 
-/datum/cult_sacrifice_zone
+/datum/cult_obj_overhead/cult_sacrifice_zone
 	var/list/datum/potential_sacrifice_info/tracking_sacrifices
-	var/obj/sacrificial_obj
 	var/obj/decal/cultcircle/rune
 	var/turf/centre_turf
-	var/datum/cult/owner
 	var/is_rune = FALSE
 	var/tracking_range = 0
-
-	proc/try_connect(obj/new_object, datum/cult/new_cult)
-		if (new_object == null || new_cult == null)
-			return 0
-		owner = new_cult
-		sacrificial_obj = new_object
-		is_rune = istype(new_object, /obj/decal/cultcircle)
-		if (is_rune)
-			rune = new_object
-			rune.subscribe_to_cult(owner)
-
-		src.update_range()
-
-		return 1
 
 	proc/sacrifice_human(datum/potential_sacrifice_info/sacrifice)
 		if (!can_sacrifice_human(sacrifice.human))
@@ -53,7 +37,7 @@
 			sacrifice.human.bioHolder.mobAppearance.flavor_text = "A dessicated husk."
 			sacrifice.human.disfigured = TRUE
 			sacrifice.human.UpdateName()
-		sacrificial_obj.visible_message(SPAN_ALERT("[sacrificial_obj] pulses and groans erratically, glowing with an evil aura!"))
+		connected_obj.visible_message(SPAN_ALERT("[connected_obj] pulses and groans erratically, glowing with an evil aura!"))
 		src.tracking_sacrifices.Remove(sacrifice)
 		qdel(sacrifice)
 
@@ -98,7 +82,7 @@
 			sacrifice.ever_awake = TRUE
 
 	proc/update_range()
-		src.tracking_range = round(max(sacrificial_obj.bound_width, sacrificial_obj.bound_height) / 64, 1)
+		src.tracking_range = round(max(connected_obj.bound_width, connected_obj.bound_height) / 64, 1)
 		if (!is_rune) // If it's a sacrificial circle, don't give any extra.
 			src.tracking_range += 3
 
@@ -106,8 +90,8 @@
 		if (is_rune)
 			rune.deactivate()
 
-		sacrificial_obj.desc = "Tracking deaths in [tracking_range]"
-		centre_turf = get_turf(sacrificial_obj) // Object size will mean this might have to change (configured for circles)
+		connected_obj.desc = "Tracking deaths in [tracking_range]"
+		centre_turf = get_turf(connected_obj) // Object size will mean this might have to change (configured for circles)
 		var/list/within_circle = range(src.tracking_range, centre_turf)
 		// Find new humans that might turn up as cult meat soon
 		for (var/mob/living/carbon/human/human in within_circle) // lack of as intentional
@@ -122,11 +106,12 @@
 		for (var/datum/potential_sacrifice_info/potential_sac as anything in src.tracking_sacrifices)
 			src.check_human(potential_sac)
 
-	New()
-		. = ..()
+	New(obj/new_obj, datum/cult/new_cult)
 		tracking_sacrifices = list()
 		START_TRACKING // Tracked by processes
-
-	disposing()
 		..()
-		STOP_TRACKING
+		is_rune = istype(new_obj, /obj/decal/cultcircle)
+		if (is_rune)
+			rune = new_obj
+			rune.subscribe_to_cult(owner)
+		src.update_range()

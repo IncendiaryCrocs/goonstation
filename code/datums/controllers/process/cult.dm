@@ -4,6 +4,6 @@
 		schedule_interval = CULT_SACRIFICE_CHECK_FREQUENCY
 
 	doWork()
-		for_by_tcl(circle, /datum/cult_sacrifice_zone)
+		for_by_tcl(circle, /datum/cult_obj_overhead/cult_sacrifice_zone)
 			circle.process()
 

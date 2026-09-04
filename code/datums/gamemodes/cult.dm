@@ -221,3 +221,17 @@
 
 	disposing()
 		..()
+
+/datum/cult_obj_overhead
+	var/obj/connected_obj
+	var/datum/cult/owner
+
+	New(obj/new_obj, datum/cult/new_cult)
+		. = ..()
+		START_TRACKING
+		owner = new_cult
+		connected_obj = new_obj
+
+	disposing()
+		..()
+		STOP_TRACKING
