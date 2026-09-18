@@ -301,6 +301,7 @@
 		"stamp-sprite-gtc" = "[resource("images/tgui/stamp_icons/stamp-gtc.png")]",
 		"stamp-sprite-flock" = "[resource("images/tgui/stamp_icons/stamp-flock.apng")]",
 		"stamp-sprite-vamp" = "[resource("images/tgui/stamp_icons/stamp-vamp.png")]",
+		"stamp-sprite-un" = "[resource("images/tgui/stamp_icons/stamp-un.png")]",
 		"stamp-text-time" =  T,
 		"stamp-text-name" = user.name
 	)
